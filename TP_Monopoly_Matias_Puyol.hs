@@ -20,8 +20,8 @@ type Propiedad = (String,Int)
 modificarCantidadDeDinero ::  (Int->Int) -> Participante -> Participante
 modificarCantidadDeDinero unaFuncion unParticipante = unParticipante { cantidadDeDinero = unaFuncion ( cantidadDeDinero unParticipante ) }
 
-modificarTactica ::  Tactica -> Participante -> Participante
-modificarTactica  nuevaTactica unParticipante = unParticipante { tacticaDeJuego = nuevaTactica }
+cambiarTactica ::  Tactica -> Participante -> Participante
+cambiarTactica  nuevaTactica unParticipante = unParticipante { tacticaDeJuego = nuevaTactica }
 
 agregarAccion :: Accion -> Participante -> Participante
 agregarAccion  unaAccion unParticipante = unParticipante {accionesDelJuego = accionesDelJuego unParticipante ++ [unaAccion] } 
@@ -29,22 +29,19 @@ agregarAccion  unaAccion unParticipante = unParticipante {accionesDelJuego = acc
 esPropiedadBarata :: Propiedad -> Bool
 esPropiedadBarata (_,precioPropiedad) = precioPropiedad < 150
 
-esPropiedadCara ::  Propiedad -> Bool
-esPropiedadCara (_,precioPropiedad) = precioPropiedad > 150
-
-contarPropiedadesBaratas :: Participante -> Int
-contarPropiedadesBaratas  unParticipante  =  (length.filter esPropiedadBarata) (propiedadesCompradas unParticipante) 
-
-contarPropiedadesCaras :: Participante -> Int
-contarPropiedadesCaras unParticipante  =  (length.filter esPropiedadCara) (propiedadesCompradas unParticipante) 
+precioAlquiler :: Propiedad -> Int
+precioAlquiler unaPropiedad
+  | esPropiedadBarata unaPropiedad = 10
+  | otherwise                   = 20
 
 agregarPropiedad :: Propiedad -> Participante -> Participante
 agregarPropiedad unaPropiedad (ConstructorParticipante unNombre dinero tactic unasPropiedades unasAcciones) = ConstructorParticipante unNombre (dinero -(snd unaPropiedad) ) tactic (unasPropiedades ++ [unaPropiedad]) unasAcciones
 
-
+ingresosPorAlquileres :: Participante -> Int
+ingresosPorAlquileres persona = sum . map precioAlquiler . propiedadesCompradas $ persona
 
 pasarPorElBanco :: Accion
-pasarPorElBanco  unParticipante = (modificarCantidadDeDinero(+ 40). modificarTactica("Comprador Compulsivo") ) unParticipante
+pasarPorElBanco  unParticipante = (modificarCantidadDeDinero(+ 40). cambiarTactica("Comprador Compulsivo") ) unParticipante
 
 enojarse :: Accion
 enojarse  unParticipante = (modificarCantidadDeDinero(+ 50). agregarAccion( gritar ) ) unParticipante
@@ -53,17 +50,19 @@ gritar :: Accion
 gritar unParticipante = unParticipante {nombre = "AHHHH " ++ nombre unParticipante}
 
 cobrarAlquileres :: Accion
-cobrarAlquileres unParticipante = modificarCantidadDeDinero ( + (10 * contarPropiedadesBaratas unParticipante + 20 * contarPropiedadesCaras unParticipante))  unParticipante
+cobrarAlquileres unParticipante = modificarCantidadDeDinero ((+).ingresosPorAlquileres $ unParticipante) unParticipante
+
+tieneLaTactica :: Participante -> Tactica -> Bool
+tieneLaTactica unParticipante unaTactica = tacticaDeJuego unParticipante == unaTactica
 
 subastar :: Propiedad -> Accion
 subastar unasPropiedades unParticipante 
-    |  tacticaDeJuego unParticipante == "Accionista" = agregarPropiedad unasPropiedades unParticipante
-    |  tacticaDeJuego unParticipante == "Oferente Singular" = agregarPropiedad unasPropiedades unParticipante
+    |  tieneLaTactica unParticipante "Accionista" || tieneLaTactica unParticipante "Oferente Singular"= agregarPropiedad unasPropiedades unParticipante 
     |  otherwise = unParticipante
 
 pagarAAccionistas ::  Accion
 pagarAAccionistas unParticipante 
-    | tacticaDeJuego unParticipante == "Accionista" = modificarCantidadDeDinero (+ 200) unParticipante
+    | tieneLaTactica unParticipante "Accionista" = modificarCantidadDeDinero (+ 200) unParticipante
     | otherwise = modificarCantidadDeDinero (+ (-100)) unParticipante
 
 
@@ -74,4 +73,9 @@ carolina = ConstructorParticipante "Carolina" 500 "Accionista" [] [pasarPorElBan
 manuel :: Participante
 manuel = ConstructorParticipante "Manuel" 500 "Oferente Singular" [] [pasarPorElBanco, enojarse]
 
+--tieneLaPropiedad :: Participante -> Participante -> Bool
+--tieneLaPropiedad  unaPropiedad (ConstructorParticipante _ _ _ [unaPropiedad] _ )  = True
+--tieneLaPropiedad _ = False
 
+--hacerBerrinchePor ::  Propiedad -> Accion
+--hacerBerrinchePor 
