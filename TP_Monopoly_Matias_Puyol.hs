@@ -1,4 +1,4 @@
-
+--import Data.Foldable
 import Text.Show.Functions()
 
 
@@ -73,9 +73,30 @@ carolina = ConstructorParticipante "Carolina" 500 "Accionista" [] [pasarPorElBan
 manuel :: Participante
 manuel = ConstructorParticipante "Manuel" 500 "Oferente Singular" [] [pasarPorElBanco, enojarse]
 
---tieneLaPropiedad :: Participante -> Participante -> Bool
---tieneLaPropiedad  unaPropiedad (ConstructorParticipante _ _ _ [unaPropiedad] _ )  = True
---tieneLaPropiedad _ = False
+leAlcanzaParaComprar :: Participante -> Propiedad -> Bool
+leAlcanzaParaComprar unParticipante (_,valorPropiedad) = cantidadDeDinero unParticipante >= valorPropiedad
 
---hacerBerrinchePor ::  Propiedad -> Accion
---hacerBerrinchePor 
+
+hacerBerrinchePor ::  Propiedad -> Participante -> Participante
+hacerBerrinchePor unaPropiedad unParticipante | leAlcanzaParaComprar unParticipante unaPropiedad = agregarPropiedad unaPropiedad unParticipante
+                                              |  otherwise  = hacerBerrinchePor(unaPropiedad) ((gritar.modificarCantidadDeDinero(+10)) unParticipante )
+
+
+
+ultimaRonda :: Participante -> Accion
+ultimaRonda unParticipante = foldl1 (.) (accionesDelJuego unParticipante)
+
+
+cantidadDeDineroFinal ::  Participante -> Int
+cantidadDeDineroFinal unParticipante = (cantidadDeDinero.(ultimaRonda unParticipante)) unParticipante
+
+
+--cambio el nombre de juegoFinal por quienGano
+
+quienGano :: Participante -> Participante -> Participante
+quienGano unParticipante otroParticipante | cantidadDeDineroFinal unParticipante > cantidadDeDineroFinal otroParticipante = unParticipante
+                                          | otherwise = otroParticipante
+                                          
+
+
+
