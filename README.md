@@ -1,2 +1,2 @@
-# Matias Puyol
-Tp Monopoly PdeP UTN FRBA 2020
+# Octavio Ramírez y Matías Puyol 
+PdeP UTN FRBA 2020
