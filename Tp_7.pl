@@ -1,25 +1,3 @@
-/*
-Quien mata es porque odia a su víctima y no es más rico que ella. Además, quien mata debe vivir en la mansión Dreadbury.
--Tía Agatha, el carnicero y Charles son las únicas personas que viven en la mansión Dreadbury.
--Charles odia a todas las personas de la mansión que no son odiadas por la tía Agatha.
--Agatha odia a todos los que viven en la mansión, excepto al carnicero.
--Quien no es odiado por el carnicero y vive en la mansión, es más rico que tía Agatha
--El carnicero odia a las mismas personas que odia tía Agatha.
-
-
-El programa debe resolver el problema de quién mató a la tía Agatha. 
-Mostrar la consulta utilizada y la respuesta obtenida.
-
-Agregar los mínimos hechos y reglas necesarios para poder consultar:
-- Si existe alguien que odie a milhouse.
-- A quién odia charles.
-- El nombre de quien odia a agatha.
-- Todos los odiadores y sus odiados.
-- Si es cierto que el carnicero odia a alguien.
-Mostrar las consultas utilizadas para conseguir lo anterior, junto con las respuestas obtenidas.
-
-
-*/
 
 viveEnLaMansion(agatha).
 viveEnLaMansion(carnicero).
