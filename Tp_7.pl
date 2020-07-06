@@ -5,22 +5,22 @@ viveEnLaMansion(charles).
 
 odia(agatha, Odiado):-
     viveEnLaMansion(Odiado),
-    Odiado \= carnicero,
-    Odiado \= agatha.
+    Odiado \= carnicero.
+   
 
 odia(charles, Odiado):-
     viveEnLaMansion(Odiado),
-    not(odia(agatha, Odiado)),
-    Odiado \= charles.
+    not(odia(agatha, Odiado)).
+    
 
 odia(carnicero, Odiado):-
-    odia(agatha, Odiado),
-    Odiado \= carnicero.
+    odia(agatha, Odiado).
+   
 
 esMasRicoQue(Rico, agatha):-
     viveEnLaMansion(Rico),
-    not(odia(carnicero, Rico)),
-    Rico \= agatha.
+    not(odia(carnicero, Rico)).
+    
 
 mata(Asesino, Victima):-
     viveEnLaMansion(Asesino),
@@ -32,7 +32,7 @@ mata(Asesino, Victima):-
 ASESINO DE AGATHA:
 
 21 ?- mata(Quien,agatha).
-Quien = charles.
+Quien = agatha.
 
 
 CONSULTAS:
