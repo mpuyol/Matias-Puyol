@@ -41,23 +41,26 @@ CONSULTAS:
 false.
 
 23 ?- odia(charles,Quien). 
-Quien = agatha ;
 Quien = carnicero ;
 false.
 
 24 ?- odia(Quien,agatha).
-Quien = charles .
+Quien = agatha ;
+Quien = carnicero.
 
-25 ?- odia(Odiador, Odiado).
-Odiador = agatha,
-Odiado = charles ;
-Odiador = charles,
-Odiado = agatha ;
-Odiador = charles,
-Odiado = carnicero ;
-Odiador = carnicero,
-Odiado = charles.
+
+8 ?- odia(Quien,AQuien).
+Quien = AQuien, AQuien = agatha ;
+Quien = agatha,
+AQuien = charles ;
+Quien = charles,
+AQuien = carnicero ;
+Quien = carnicero,
+AQuien = agatha ;
+Quien = carnicero,
+AQuien = charles.
 
 26 ?- odia(carnicero,_).
+true ;
 true.
 */
